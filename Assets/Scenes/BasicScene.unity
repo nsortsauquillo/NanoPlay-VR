@@ -140,7 +140,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2946402230c2ca9afb27f511d56c0bae, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -8.917
+      value: -8.38
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 2946402230c2ca9afb27f511d56c0bae, type: 3}
       propertyPath: m_LocalRotation.w
@@ -247,6 +247,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 2946402230c2ca9afb27f511d56c0bae, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1787959172}
+    - targetCorrespondingSourceObject: {fileID: -650433988561056430, guid: 2946402230c2ca9afb27f511d56c0bae, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 789142245}
     - targetCorrespondingSourceObject: {fileID: -5004740735922860266, guid: 2946402230c2ca9afb27f511d56c0bae, type: 3}
       insertIndex: -1
       addedObject: {fileID: 259372249}
@@ -560,6 +563,32 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &789142241 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -650433988561056430, guid: 2946402230c2ca9afb27f511d56c0bae, type: 3}
+  m_PrefabInstance: {fileID: 259372247}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &789142245
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 789142241}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.0021266975, y: 0.002126697, z: 0.00503531}
+  m_Center: {x: -1.1641532e-10, y: 1.164153e-10, z: 0.000079198144}
 --- !u!1001 &801742289
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -871,6 +900,37 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: -5004740735922860266, guid: 2946402230c2ca9afb27f511d56c0bae, type: 3}
   m_PrefabInstance: {fileID: 259372247}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1423327999
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1423328000}
+  m_Layer: 0
+  m_Name: BottleMinigame
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1423328000
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1423327999}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 14.178266, y: -7.8350344, z: -22.933283}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1689082370
 GameObject:
   m_ObjectHideFlags: 0
@@ -1015,11 +1075,20 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0
@@ -1161,3 +1230,4 @@ SceneRoots:
   - {fileID: 801742289}
   - {fileID: 259372247}
   - {fileID: 899739875}
+  - {fileID: 1423328000}
