@@ -1144,7 +1144,8 @@ PrefabInstance:
       propertyPath: m_Name
       value: Test Can
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4774668351957280395, guid: 685ec35005e8c6b4faa6018ae0c9ba28, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
