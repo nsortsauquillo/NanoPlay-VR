@@ -18,7 +18,7 @@ public class Weapon : MonoBehaviour
 
 
 
-    public void Update()
+    public void FixedUpdate()
     {
         bool hasHit = Physics.Linecast(startSlicePoint.position, endSlicePoint.position, out RaycastHit hitInfo, sliceableLayer);
         if (hasHit)
@@ -45,6 +45,9 @@ public class Weapon : MonoBehaviour
             SetupSlicedComponent(lowerHull);
 
             Destroy(target);
+
+            Destroy(upperHull, 5f); 
+            Destroy(lowerHull, 5f);
         }
     }
 

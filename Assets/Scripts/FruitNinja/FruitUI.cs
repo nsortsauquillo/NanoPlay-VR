@@ -11,13 +11,11 @@ public class FruitUI : MonoBehaviour
     public TextMeshProUGUI MainText;
     public TextMeshProUGUI ScoreText;
     public TextMeshProUGUI LivesText;
-    public TextMeshProUGUI FruitsSlicedText;
 
 
     private void Update()
     {
         LivesText.text = gameManager.lives.ToString();
-        FruitsSlicedText.text = gameManager.fruitsSliced.ToString();
         ScoreText.text = gameManager.score.ToString();
     }
 

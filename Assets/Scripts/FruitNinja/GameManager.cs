@@ -9,7 +9,6 @@ public class GameManager : MonoBehaviour
     public FruitUI UI;
     public int score = 0;
     public int lives = 3;
-    public int fruitsSliced = 0;
     public bool GameStarted = false;
 
     float countdown = 4;
@@ -51,7 +50,6 @@ public class GameManager : MonoBehaviour
     public void IncreaseScore(int points)
     {
         score += points;
-        fruitsSliced++;
     }
 
     public void StartGame()
@@ -59,10 +57,9 @@ public class GameManager : MonoBehaviour
         fruitSpawner.StartSpawning();
         score = 0;
         countdown = 4;
-        fruitsSliced = 0;
         lives = 3;
         UI.LivesText.text = lives.ToString();
-        UI.ScoreText.text = fruitsSliced.ToString();
+        UI.ScoreText.text = score.ToString();
         GameStarted = true;
     }
 
