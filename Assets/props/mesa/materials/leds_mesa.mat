@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-8567969295697190346
+--- !u!114 &-1334322438439666266
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_leds
+  m_Name: leds_mesa
   m_Shader: {fileID: -6465566751694194690, guid: 0b9a1c2247cd139439612dcf38e56487, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -58,10 +58,10 @@ Material:
     - _scale2: 29
     - _width: 0.5
     m_Colors:
-    - _backcolor: {r: 0, g: 0.8218391, b: 1, a: 0}
+    - _backcolor: {r: 0.1945087, g: 0.7578431, b: 0.8773585, a: 0}
     - _min_max_in: {r: -1, g: 1, b: 0, a: 0}
     - _min_max_out: {r: -30, g: 10, b: 0, a: 0}
-    - _noise_color: {r: 0.18286434, g: 0.6415094, b: 0, a: 0}
+    - _noise_color: {r: 1, g: 0.01978819, b: 0, a: 0}
     - _velocidad1: {r: -0.7, g: -0.42, b: 0, a: 0}
     - _velocidad2: {r: 0.24, g: -0.28, b: 0, a: 0}
   m_BuildTextureStacks: []
