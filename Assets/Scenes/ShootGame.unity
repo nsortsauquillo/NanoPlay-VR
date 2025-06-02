@@ -597,6 +597,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 77e7c27b2c5525e4aa8cc9f99d654486, type: 3}
+--- !u!114 &644910510 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8502280755065945414, guid: ff18de0484f09bc4ba8efe3bcb233b05, type: 3}
+  m_PrefabInstance: {fileID: 1181580752419868675}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &729367549
 GameObject:
   m_ObjectHideFlags: 0
@@ -847,6 +858,17 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.0349255, y: 0.00010948539, z: 0.034925498}
   m_Center: {x: 0, y: -0.000052995976, z: 9.313226e-10}
+--- !u!114 &995356429 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9145922696164290185, guid: ff18de0484f09bc4ba8efe3bcb233b05, type: 3}
+  m_PrefabInstance: {fileID: 1181580752419868675}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1033438322
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1534,6 +1556,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 729367550}
     - target: {fileID: 8819578048260371532, guid: 9852605d9bf27cb4e9f25c72d7ba7109, type: 3}
+      propertyPath: highScoreText
+      value: 
+      objectReference: {fileID: 644910510}
+    - target: {fileID: 8819578048260371532, guid: 9852605d9bf27cb4e9f25c72d7ba7109, type: 3}
+      propertyPath: currentScoreText
+      value: 
+      objectReference: {fileID: 995356429}
+    - target: {fileID: 8819578048260371532, guid: 9852605d9bf27cb4e9f25c72d7ba7109, type: 3}
       propertyPath: canSpawners.Array.size
       value: 6
       objectReference: {fileID: 0}
@@ -1659,7 +1689,8 @@ PrefabInstance:
       value: ShootingGameManager, Assembly-CSharp
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 1793925523861487804, guid: ff18de0484f09bc4ba8efe3bcb233b05, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ff18de0484f09bc4ba8efe3bcb233b05, type: 3}

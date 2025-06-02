@@ -16,6 +16,8 @@ public class Weapon : MonoBehaviour
     public Material crossSectionMaterial;
     public float cutForce = 2000;
 
+    private HashSet<GameObject> processedObjects = new HashSet<GameObject>();
+
 
 
     public void FixedUpdate()
@@ -56,7 +58,7 @@ public class Weapon : MonoBehaviour
                 lowerHull.transform.position = meshObj.transform.position;
                 lowerHull.transform.rotation = meshObj.transform.rotation;
                 lowerHull.transform.localScale = meshObj.transform.lossyScale;
-
+                  
                 SetupSlicedComponent(lowerHull);
 
                 Destroy(meshObj);
@@ -79,20 +81,26 @@ public class Weapon : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         Debug.Log("Collision detected with: " + collision.gameObject.name);
+        GameObject obj = collision.gameObject;
+
+        if (processedObjects.Contains(obj))
+            return;
+
+        processedObjects.Add(obj);
         if (collision.gameObject.CompareTag("Fruit"))
         {
             Fruit fruit = collision.gameObject.GetComponent<Fruit>();
             if (fruit != null)
             {
                 gameManager.IncreaseScore(fruit.points);
-                //UI.ScoreText.text = gameManager.score.ToString();
+                UI.ScoreText.text = gameManager.score.ToString();
                 fruit.Slice();
             }
         }
         else if (collision.gameObject.CompareTag("Bomb"))
         {
             gameManager.DecreaseLife();
-            //UI.LivesText.text = gameManager.lives.ToString();
+            UI.LivesText.text = gameManager.lives.ToString();
             Destroy(collision.gameObject);
         }
     }

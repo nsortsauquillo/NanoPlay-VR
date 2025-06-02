@@ -77,8 +77,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitForce: 1.1
   upwardForce: 3
-  hitSound: {fileID: 0}
-  hitEffect: {fileID: 0}
+  upwardVariation: 2
+  hitSound: {fileID: 8300000, guid: 9a603419b9c1cf1439c4d38299470752, type: 3}
+  hitEffect: {fileID: 559341907419296761, guid: 818a9c13d06ef4e449fe48ca7842a502, type: 3}
   canMass: 0.1
   canDrag: 10
   canAngularDrag: 0.05
