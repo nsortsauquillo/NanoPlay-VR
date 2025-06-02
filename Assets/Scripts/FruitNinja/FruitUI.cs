@@ -6,7 +6,7 @@ using TMPro;
 public class FruitUI : MonoBehaviour
 {
     public GameManager gameManager;
-
+      
     public GameObject mainPanel; 
     public TextMeshProUGUI MainText;
     public TextMeshProUGUI ScoreText;
