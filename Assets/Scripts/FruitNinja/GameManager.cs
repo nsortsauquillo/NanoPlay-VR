@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -22,32 +23,12 @@ public class GameManager : MonoBehaviour
     public float bombChance = 0.1f;
     public float forceMultiplier = 1f;
 
-
-    public void Start()
-    {
-        StartGame();
-    }
     private void Update()
     {
         if (GameStarted)
         {
-            if(countdown >= 0)
-            {
-                countdown -= Time.deltaTime;
-                if(countdown > 1)
-                {
-                    //UI.MainText.text = "Game starts in " + Mathf.CeilToInt(countdown).ToString();   
-                }
-                else
-                {
-                    //UI.MainText.text = "Go!";
-                }
-            }
-            else
-            {
-                gameTimer += Time.deltaTime;
-                UpdateDifficulty();
-            }
+            gameTimer += Time.deltaTime;
+            UpdateDifficulty();
         }
     }
 
@@ -76,17 +57,21 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
+        if (GameStarted) return; 
+        UI.mainPanel.SetActive(true);
         fruitSpawner.StartSpawning();
         score = 0;
         countdown = 4;
         lives = 3;
-        //UI.LivesText.text = lives.ToString();
-        //UI.ScoreText.text = score.ToString();
+        UI.LivesText.text = lives.ToString();
+        UI.ScoreText.text = score.ToString();
         GameStarted = true;
     }
 
     public void StopGame()
     {
+        if (!GameStarted) return;
+        UI.mainPanel.SetActive(false);
         fruitSpawner.StopSpawning();
         GameStarted = false;
         UI.MainText.text = " ";
