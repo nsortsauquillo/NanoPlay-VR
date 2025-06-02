@@ -59,7 +59,7 @@ public class SodaShakeManager : MonoBehaviour
         }
 
         // Optionally, auto-start
-        StartGame();
+        //StartGame();
     }
 
     void Update()
@@ -230,5 +230,14 @@ public class SodaShakeManager : MonoBehaviour
         aiShaking = false;
         aiShakeElapsed = 0f;
         Debug.Log("Soda Shake Game Started! Player goes first.");
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+        // Only start/restart if not already active
+        if (!gameActive && other.CompareTag("Player"))
+        {
+            StartGame();
+        }
     }
 }
