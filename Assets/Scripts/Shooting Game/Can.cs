@@ -5,9 +5,11 @@ public class Can : MonoBehaviour
     [Header("Can Settings")]
     [SerializeField] float hitForce = 10f;
     [SerializeField] AudioClip hitSound;
+    [SerializeField] ParticleSystem hitEffect;
     
     private Rigidbody rb;
     private AudioSource audioSource;
+    private bool hasBeenHit = false;
     
     void Start()
     {
@@ -27,15 +29,32 @@ public class Can : MonoBehaviour
             audioSource = gameObject.AddComponent<AudioSource>();
             audioSource.spatialBlend = 1f; // 3D sound
         }
+        
+        // Make sure we have a collider
+        if (GetComponent<Collider>() == null)
+        {
+            gameObject.AddComponent<BoxCollider>();
+        }
     }
     
     public void OnHit(Vector3 hitPoint, Vector3 hitDirection)
     {
+        if (hasBeenHit) return; // Prevent multiple hits from same bullet
+        
+        hasBeenHit = true;
+        
         // Apply force to the can
         if (rb != null)
         {
             Vector3 force = hitDirection * hitForce;
             rb.AddForceAtPosition(force, hitPoint, ForceMode.Impulse);
+        }
+        
+        // Play hit effect
+        if (hitEffect != null)
+        {
+            hitEffect.transform.position = hitPoint;
+            hitEffect.Play();
         }
         
         // Play hit sound
@@ -45,5 +64,13 @@ public class Can : MonoBehaviour
         }
         
         Debug.Log("Can hit!");
+        
+        // Reset hit flag after a short time
+        Invoke(nameof(ResetHitFlag), 0.1f);
+    }
+    
+    void ResetHitFlag()
+    {
+        hasBeenHit = false;
     }
 }
