@@ -18,11 +18,11 @@ public class FruitSpawner : MonoBehaviour
                 GameObject prefabToSpawn;
                 if (Random.value < gameManager.bombChance)
                 {
-                    prefabToSpawn = fruits[fruits.Count - 1]; // Assuming the last fruit is a bomb
+                    prefabToSpawn = fruits[fruits.Count - 1]; 
                 }
                 else
                 {
-                    int randomIndex = Random.Range(0, fruits.Count - 1); // Exclude the bomb
+                    int randomIndex = Random.Range(0, fruits.Count - 1); 
                     prefabToSpawn = fruits[randomIndex];
                 }
 
@@ -32,14 +32,14 @@ public class FruitSpawner : MonoBehaviour
 
                 Rigidbody rb = obj.GetComponent<Rigidbody>();
 
-                // Lanzamiento en parábola: fuerza con componente vertical + horizontal
+               
                 Vector3 baseDirection = new Vector3(
-                    Random.Range(-0.5f, 0.5f),  // Variación horizontal X
-                    Random.Range(0.5f, 2.5f),                        // Componente vertical (subida)
-                    0f   // Variación horizontal Z hacia adelante
+                    0f,  
+                    Random.Range(0.5f, 2.5f),                        
+                    0f   
                 ).normalized;
 
-                float forceMagnitude = 8f * gameManager.forceMultiplier; // Ajusta fuerza total aquí
+                float forceMagnitude = 8f * gameManager.forceMultiplier; 
 
                 Vector3 launchForce = baseDirection * forceMagnitude;
                 rb.AddForce(launchForce, ForceMode.Impulse);

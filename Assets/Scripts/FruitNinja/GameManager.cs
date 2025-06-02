@@ -36,11 +36,11 @@ public class GameManager : MonoBehaviour
                 countdown -= Time.deltaTime;
                 if(countdown > 1)
                 {
-                    UI.MainText.text = "Game starts in " + Mathf.CeilToInt(countdown).ToString();   
+                    //UI.MainText.text = "Game starts in " + Mathf.CeilToInt(countdown).ToString();   
                 }
                 else
                 {
-                    UI.MainText.text = "Go!";
+                    //UI.MainText.text = "Go!";
                 }
             }
             else
@@ -80,8 +80,8 @@ public class GameManager : MonoBehaviour
         score = 0;
         countdown = 4;
         lives = 3;
-        UI.LivesText.text = lives.ToString();
-        UI.ScoreText.text = score.ToString();
+        //UI.LivesText.text = lives.ToString();
+        //UI.ScoreText.text = score.ToString();
         GameStarted = true;
     }
 
