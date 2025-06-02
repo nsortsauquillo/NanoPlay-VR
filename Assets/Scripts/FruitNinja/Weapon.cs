@@ -30,24 +30,36 @@ public class Weapon : MonoBehaviour
 
     public void Slice(GameObject target)
     {
-        Vector3 velocity = estimator.GetVelocityEstimate();
-        Vector3 planeNormal = Vector3.Cross(endSlicePoint.position - startSlicePoint.position, velocity).normalized;
-        planeNormal.Normalize();
+        MeshFilter[] meshFilters = target.GetComponentsInChildren<MeshFilter>();
+        bool slicedAny = false;
 
-
-        SlicedHull hull = target.Slice(endSlicePoint.position, planeNormal);
-
-        if (hull != null)
+        foreach (MeshFilter mf in meshFilters)
         {
-            GameObject upperHull = hull.CreateUpperHull(target, crossSectionMaterial);
-            SetupSlicedComponent(upperHull);
-            GameObject lowerHull = hull.CreateLowerHull(target, crossSectionMaterial);
-            SetupSlicedComponent(lowerHull);
+            GameObject meshObj = mf.gameObject;
+            Vector3 velocity = estimator.GetVelocityEstimate();
+            Vector3 planeNormal = Vector3.Cross(endSlicePoint.position - startSlicePoint.position, velocity).normalized;
 
-            Destroy(target);
+            SlicedHull hull = meshObj.Slice(endSlicePoint.position, planeNormal);
 
-            Destroy(upperHull, 5f); 
-            Destroy(lowerHull, 5f);
+            if (hull != null)
+            {
+                GameObject upperHull = hull.CreateUpperHull(meshObj, crossSectionMaterial);
+                SetupSlicedComponent(upperHull);
+                upperHull.transform.position = meshObj.transform.position;
+                upperHull.transform.rotation = meshObj.transform.rotation;
+                upperHull.transform.localScale = meshObj.transform.localScale;
+                GameObject lowerHull = hull.CreateLowerHull(meshObj, crossSectionMaterial);
+                SetupSlicedComponent(lowerHull);
+                lowerHull.transform.position = meshObj.transform.position;
+                lowerHull.transform.rotation = meshObj.transform.rotation;
+                lowerHull.transform.localScale = meshObj.transform.localScale;
+
+                Destroy(meshObj);
+                Destroy(upperHull, 5f);
+                Destroy(lowerHull, 5f);
+
+                slicedAny = true; 
+            }
         }
     }
 
@@ -56,7 +68,7 @@ public class Weapon : MonoBehaviour
         Rigidbody rb = slicedObj.AddComponent<Rigidbody>();
         MeshCollider collider = slicedObj.AddComponent<MeshCollider>();
         collider.convex = true;
-        rb.AddExplosionForce(cutForce, slicedObj.transform.position, 1f);
+        //rb.AddExplosionForce(cutForce, slicedObj.transform.position, 1f);
     }
 
     private void OnCollisionEnter(Collision collision)
