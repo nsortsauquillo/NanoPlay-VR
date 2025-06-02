@@ -93,14 +93,14 @@ public class Weapon : MonoBehaviour
             if (fruit != null)
             {
                 gameManager.IncreaseScore(fruit.points);
-                UI.ScoreText.text = gameManager.score.ToString();
+                //UI.ScoreText.text = gameManager.score.ToString();
                 fruit.Slice();
             }
         }
         else if (collision.gameObject.CompareTag("Bomb"))
         {
             gameManager.DecreaseLife();
-            UI.LivesText.text = gameManager.lives.ToString();
+            //UI.LivesText.text = gameManager.lives.ToString();
             Destroy(collision.gameObject);
         }
     }
