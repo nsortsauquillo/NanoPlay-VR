@@ -24,22 +24,10 @@ public class Gun : MonoBehaviour
         {
             grabInteractable.activated.AddListener(OnTriggerPulled);
         }
-        
-        // Validate components
-        if (firePoint == null)
-        {
-            Debug.LogError("FirePoint is not assigned on Gun!");
-        }
-        
-        if (bulletPrefab == null)
-        {
-            Debug.LogError("BulletPrefab is not assigned on Gun!");
-        }
     }
     
     void OnTriggerPulled(ActivateEventArgs args)
     {
-        Debug.Log("Trigger pulled!");
         if (Time.time >= lastFireTime + fireRate)
         {
             Fire();
@@ -51,7 +39,6 @@ public class Gun : MonoBehaviour
     {
         if (firePoint == null || bulletPrefab == null)
         {
-            Debug.LogError("Cannot fire: FirePoint or BulletPrefab is missing!");
             return;
         }
         
@@ -65,7 +52,6 @@ public class Gun : MonoBehaviour
         // Instantiate bullet
         GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         
-        Debug.Log($"Bullet fired from {firePoint.position} in direction {firePoint.forward}");
     }
     
     void OnDestroy()

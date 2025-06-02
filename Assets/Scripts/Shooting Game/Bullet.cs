@@ -29,14 +29,40 @@ public class Bullet : MonoBehaviour
         // Destroy after lifetime
         Destroy(gameObject, lifetime);
     }
+      private bool hasHitTarget = false; // Prevent multiple hits from same bullet
     
     void OnTriggerEnter(Collider other)
     {
+        if (hasHitTarget) return; // Prevent multiple triggers
+        
         // Don't hit the gun or player
         if (other.CompareTag("Player") || other.CompareTag("Gun"))
             return;
             
-        Debug.Log($"Bullet hit: {other.name}");
+        Debug.Log($"Bullet OnTriggerEnter: {other.name}");
+        HandleHit(other);
+    }
+    
+    void OnCollisionEnter(Collision collision)
+    {
+        if (hasHitTarget) return; // Prevent multiple collisions
+        
+        Collider other = collision.collider;
+        
+        // Don't hit the gun or player
+        if (other.CompareTag("Player") || other.CompareTag("Gun"))
+            return;
+            
+        Debug.Log($"Bullet OnCollisionEnter: {other.name}");
+        HandleHit(other);
+    }
+    
+    void HandleHit(Collider other)
+    {
+        if (hasHitTarget) return; // Double check
+        hasHitTarget = true;
+        
+        Debug.Log($"Bullet hit target: {other.name}");
         
         // Check if we hit a can
         Can can = other.GetComponent<Can>();
