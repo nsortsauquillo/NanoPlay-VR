@@ -18,7 +18,8 @@ public class ShootingGameManager : MonoBehaviour
     [SerializeField] AudioSource musicSource;
     [SerializeField] AudioClip synthwaveMusic;
     [SerializeField] AudioClip gameOverSound;
-      // Game State
+    
+    // Game State
     private GameState currentState = GameState.Ready;
     private int currentScore = 0;
     private float gameTimer;
@@ -35,7 +36,8 @@ public class ShootingGameManager : MonoBehaviour
         Playing,
         GameOver
     }
-      void Start()
+    
+    void Start()
     {
         InitializeGame();
     }
@@ -46,6 +48,7 @@ public class ShootingGameManager : MonoBehaviour
         {
             UpdateGameTimer();
             UpdatePhase();
+            CleanupDestroyedCans(); // Clean up null references
         }
     }
     
@@ -65,7 +68,8 @@ public class ShootingGameManager : MonoBehaviour
             musicSource.Play();
         }
     }
-      public void StartMinigame()
+    
+    public void StartMinigame()
     {
         StartGame();
     }
@@ -114,24 +118,47 @@ public class ShootingGameManager : MonoBehaviour
                 return i + 1;
         }
         return 0;
-    }    IEnumerator SpawnCansCoroutine()
+    }
+    
+    IEnumerator SpawnCansCoroutine()
     {
         while (currentState == GameState.Playing)
         {
             int cansToSpawn = Mathf.Min(currentPhase + 1, maxCans);
             
-            ClearActiveCans();
+            // Count how many cans are currently active (not destroyed)
+            int currentActiveCans = GetActiveCanCount();
             
-            for (int i = 0; i < cansToSpawn && i < canSpawners.Length; i++)
+            // Only spawn new cans if we're below the maximum
+            int cansNeeded = cansToSpawn - currentActiveCans;
+            
+            for (int i = 0; i < cansNeeded && i < canSpawners.Length; i++)
             {
-                SpawnCan(canSpawners[i]);
+                SpawnCan(canSpawners[i % canSpawners.Length]); // Use modulo to cycle through spawners
             }
             
             float spawnDelay = GetSpawnDelay();
             yield return new WaitForSeconds(spawnDelay);
         }
     }
-      void SpawnCan(GameObject spawner)
+    
+    int GetActiveCanCount()
+    {
+        int count = 0;
+        foreach (GameObject can in activeCans)
+        {
+            if (can != null) count++;
+        }
+        return count;
+    }
+    
+    void CleanupDestroyedCans()
+    {
+        // Remove null references from the list (cans that hit the floor and were destroyed)
+        activeCans.RemoveAll(can => can == null);
+    }
+    
+    void SpawnCan(GameObject spawner)
     {
         if (canPrefab == null || spawner == null) return;
         
@@ -142,29 +169,74 @@ public class ShootingGameManager : MonoBehaviour
         Can canScript = newCan.GetComponent<Can>();
         if (canScript != null)
         {
-            // Aquí podrías agregar un evento personalizado para cuando la lata sea golpeada
+            // Set reference to this game manager
+            canScript.SetGameManager(this);
         }
         
         activeCans.Add(newCan);
-    }    void ConfigureCanForPhase(GameObject can)
+        Debug.Log($"Spawned can at {spawner.name}. Total active cans: {GetActiveCanCount()}");
+    }
+    
+    void ConfigureCanForPhase(GameObject can)
     {
-        // Game manager only ensures proper collider setup - no rigidbody modifications
+        Rigidbody rb = can.GetComponent<Rigidbody>();
         Collider canCollider = can.GetComponent<Collider>();
+        
         if (canCollider != null)
         {
             canCollider.isTrigger = false; // Use collision detection, not trigger
         }
+        
+        if (rb == null) return;
+        
+        // Configure physics based on current phase
+        switch (currentPhase)
+        {
+            case 0: // 0-10s: Lenta, cae recta
+                rb.mass = 1f;
+                rb.drag = 2f;
+                break;
+                
+            case 1: // 10-25s: Más rápida
+                rb.mass = 1f;
+                rb.drag = 1f;
+                break;
+                
+            case 2: // 25-40s: Movimiento lateral
+                rb.mass = 1f;
+                rb.drag = 1f;
+                // Agregar fuerza lateral aleatoria pequeña
+                rb.AddForce(new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)), ForceMode.Impulse);
+                break;
+                
+            case 3: // 40-60s: Más pesada, cae más rápido
+                rb.mass = 1.3f;
+                rb.drag = 0.8f;
+                break;
+                
+            case 4: // 60+s: Rebote exagerado
+                rb.mass = 1f;
+                rb.drag = 0.5f;
+                // Create bouncy physics material
+                PhysicMaterial bouncyMat = new PhysicMaterial("Bouncy");
+                bouncyMat.bounciness = 0.8f;
+                bouncyMat.frictionCombine = PhysicMaterialCombine.Minimum;
+                bouncyMat.bounceCombine = PhysicMaterialCombine.Maximum;
+                canCollider.material = bouncyMat;
+                break;
+        }
     }
-      float GetSpawnDelay()
+    
+    float GetSpawnDelay()
     {
         switch (currentPhase)
         {
-            case 0: return 3f;
-            case 1: return 2.5f;
-            case 2: return 2f;
-            case 3: return 1.5f;
-            case 4: return 1f;
-            default: return 3f;
+            case 0: return 4f;   // Slower spawning in early phases
+            case 1: return 3f;
+            case 2: return 2.5f;
+            case 3: return 2f;
+            case 4: return 1.5f;
+            default: return 4f;
         }
     }
     
@@ -172,6 +244,16 @@ public class ShootingGameManager : MonoBehaviour
     {
         currentScore += 10;
         Debug.Log($"Can hit! Score: {currentScore}");
+    }
+    
+    public void OnCanDestroyed(GameObject can)
+    {
+        // Remove the can from our active list when it's destroyed (hits floor)
+        if (activeCans.Contains(can))
+        {
+            activeCans.Remove(can);
+            Debug.Log($"Can destroyed. Remaining active cans: {GetActiveCanCount()}");
+        }
     }
     
     void ClearActiveCans()
@@ -183,7 +265,8 @@ public class ShootingGameManager : MonoBehaviour
         }
         activeCans.Clear();
     }
-      void EndGame()
+    
+    void EndGame()
     {
         currentState = GameState.GameOver;
         gameStarted = false;

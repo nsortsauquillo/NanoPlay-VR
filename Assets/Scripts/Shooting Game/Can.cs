@@ -3,8 +3,9 @@ using UnityEngine;
 public class Can : MonoBehaviour
 {
     [Header("Can Settings")]
-    [SerializeField] float hitForce = 1.1f;      // Horizontal force
-    [SerializeField] float upwardForce = 3.0f;   // Upward force - much smaller!
+    [SerializeField] float hitForce = 3.0f;      // Horizontal force
+    [SerializeField] float upwardForce = 5.0f;   // Base upward force
+    [SerializeField] float upwardVariation = 2.0f; // Variation in upward force
     [SerializeField] AudioClip hitSound;
     [SerializeField] ParticleSystem hitEffect;
     
@@ -15,8 +16,8 @@ public class Can : MonoBehaviour
     
     private Rigidbody rb;
     private AudioSource audioSource;
-    private bool hasBeenHit = false;
     private ShootingGameManager gameManager;
+    private int hitCount = 0; // Track number of hits instead of preventing multiple hits
     
     void Start()
     {
@@ -50,8 +51,11 @@ public class Can : MonoBehaviour
             gameObject.AddComponent<BoxCollider>();
         }
         
-        // Find the game manager
-        gameManager = FindObjectOfType<ShootingGameManager>();
+        // Find the game manager if not already set
+        if (gameManager == null)
+        {
+            gameManager = FindObjectOfType<ShootingGameManager>();
+        }
         
         Debug.Log($"Can initialized: {gameObject.name}");
     }
@@ -59,51 +63,61 @@ public class Can : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         // Check if can hit the floor/ground
-        if (collision.gameObject.CompareTag("Ground") || collision.gameObject.CompareTag("Floor") || 
-            collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+        if (collision.gameObject.CompareTag("Ground") || 
+            collision.gameObject.CompareTag("Floor") || 
+            collision.gameObject.layer == LayerMask.NameToLayer("Ground") ||
+            collision.gameObject.name.ToLower().Contains("floor") ||
+            collision.gameObject.name.ToLower().Contains("ground"))
         {
-            Debug.Log("Can hit the floor, destroying...");
+            Debug.Log($"Can hit the floor after {hitCount} hits, destroying...");
+            
+            // Notify game manager before destroying
+            if (gameManager != null)
+            {
+                gameManager.OnCanDestroyed(gameObject);
+            }
+            
             Destroy(gameObject);
         }
     }
     
     public void OnHit(Vector3 hitPoint, Vector3 hitDirection)
     {
-        // Simple check to prevent multiple hits
-        if (hasBeenHit)
-        {
-            Debug.Log("Can already hit previously, ignoring additional hit");
-            return;
-        }
-        
-        hasBeenHit = true;
-        Debug.Log($"Can hit! Hit direction: {hitDirection}");
+        hitCount++; // Increment hit counter - allow multiple hits
+        Debug.Log($"Can hit #{hitCount}!");
         
         // Apply impulse to create parabolic trajectory
         if (rb != null)
         {
-            // Create horizontal force (remove Y component to keep it horizontal)
-            Vector3 horizontalDirection = new Vector3(hitDirection.x, 0, hitDirection.z).normalized;
-            Vector3 horizontalForce = horizontalDirection * hitForce;
+            // Create random horizontal direction instead of using bullet direction
+            Vector3 randomHorizontalDirection = new Vector3(
+                Random.Range(-1f, 1f), 
+                0, 
+                Random.Range(-1f, 1f)
+            ).normalized;
             
-            // Always apply upward force regardless of hit direction
-            Vector3 upwardImpulse = Vector3.up * upwardForce;
+            Vector3 horizontalForce = randomHorizontalDirection * hitForce;
             
-            Debug.Log($"Horizontal force: {horizontalForce}, Upward force: {upwardImpulse}");
+            // Add random variation to upward force
+            float randomUpwardForce = upwardForce + Random.Range(-upwardVariation, upwardVariation);
+            Vector3 upwardImpulse = Vector3.up * randomUpwardForce;
+            
+            Debug.Log($"Random horizontal force: {horizontalForce}, Variable upward force: {upwardImpulse}");
             
             // Apply forces separately
             rb.AddForce(horizontalForce, ForceMode.Impulse);
             rb.AddForce(upwardImpulse, ForceMode.Impulse);
             
-            // Add some rotation for realism
+            // Add some rotation for realism (reduce with multiple hits to prevent excessive spinning)
+            float rotationMultiplier = Mathf.Max(0.3f, 1f / hitCount);
             Vector3 randomTorque = new Vector3(
-                Random.Range(-1f, 1f), 
-                Random.Range(-1f, 1f), 
-                Random.Range(-1f, 1f)
-            );
+                Random.Range(-2f, 2f), 
+                Random.Range(-2f, 2f), 
+                Random.Range(-2f, 2f)
+            ) * rotationMultiplier;
             rb.AddTorque(randomTorque, ForceMode.Impulse);
             
-            Debug.Log("Forces applied successfully!");
+            Debug.Log("Random forces applied successfully!");
         }
         
         // Play hit effect
@@ -125,11 +139,16 @@ public class Can : MonoBehaviour
             gameManager.OnCanHit();
         }
         
-        Debug.Log("Can hit processing complete!");
+        Debug.Log($"Can hit processing complete! Total hits on this can: {hitCount}");
     }
     
-    void ResetHitFlag()
+    public void SetGameManager(ShootingGameManager manager)
     {
-        hasBeenHit = false;
+        gameManager = manager;
+    }
+    
+    public int GetHitCount()
+    {
+        return hitCount;
     }
 }
