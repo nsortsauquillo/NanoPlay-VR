@@ -75,13 +75,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebd9ce2dfee318649a49b9d3e0adb6a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitForce: 10
-  upwardForce: 1
+  hitForce: 1.1
+  upwardForce: 3
   hitSound: {fileID: 0}
   hitEffect: {fileID: 0}
-  canMass: 0.3
-  canDrag: 1.5
-  canAngularDrag: 3
+  canMass: 0.1
+  canDrag: 10
+  canAngularDrag: 0.05
 --- !u!33 &2960730063875487835
 MeshFilter:
   m_ObjectHideFlags: 0
