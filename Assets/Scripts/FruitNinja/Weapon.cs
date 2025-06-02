@@ -44,19 +44,24 @@ public class Weapon : MonoBehaviour
             if (hull != null)
             {
                 GameObject upperHull = hull.CreateUpperHull(meshObj, crossSectionMaterial);
-                SetupSlicedComponent(upperHull);
+               
                 upperHull.transform.position = meshObj.transform.position;
                 upperHull.transform.rotation = meshObj.transform.rotation;
-                upperHull.transform.localScale = meshObj.transform.localScale;
+                upperHull.transform.localScale = meshObj.transform.lossyScale;
+
+                SetupSlicedComponent(upperHull);
+
                 GameObject lowerHull = hull.CreateLowerHull(meshObj, crossSectionMaterial);
-                SetupSlicedComponent(lowerHull);
+               
                 lowerHull.transform.position = meshObj.transform.position;
                 lowerHull.transform.rotation = meshObj.transform.rotation;
-                lowerHull.transform.localScale = meshObj.transform.localScale;
+                lowerHull.transform.localScale = meshObj.transform.lossyScale;
+
+                SetupSlicedComponent(lowerHull);
 
                 Destroy(meshObj);
-                Destroy(upperHull, 5f);
-                Destroy(lowerHull, 5f);
+                Destroy(upperHull, 3f);
+                Destroy(lowerHull, 3f);
 
                 slicedAny = true; 
             }
