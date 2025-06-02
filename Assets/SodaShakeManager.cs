@@ -27,7 +27,7 @@ public class SodaShakeManager : MonoBehaviour
     private float aiShakeFrequency = 6f;
 
     // AI lift parameters
-    private Vector3 aiLiftPositionOffset = new Vector3(0, 0.0f, 0); // How high to lift the soda
+    private Vector3 aiLiftPositionOffset = new Vector3(0, 0.8f, 0); // How high to lift the soda
     private Vector3 aiOriginalPosition;
     private Quaternion aiOriginalRotation;
 
