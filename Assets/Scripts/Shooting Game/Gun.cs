@@ -5,9 +5,8 @@ public class Gun : MonoBehaviour
 {
     [Header("Gun Settings")]
     [SerializeField] Transform firePoint;
-    [SerializeField] float range = 100f;
+    [SerializeField] GameObject bulletPrefab;
     [SerializeField] float fireRate = 0.5f;
-    [SerializeField] LayerMask targetLayer = -1; // Default to all layers
     
     [Header("Effects")]
     [SerializeField] ParticleSystem muzzleFlash;
@@ -26,6 +25,16 @@ public class Gun : MonoBehaviour
             grabInteractable.activated.AddListener(OnTriggerPulled);
         }
         
+        // Validate components
+        if (firePoint == null)
+        {
+            Debug.LogError("FirePoint is not assigned on Gun!");
+        }
+        
+        if (bulletPrefab == null)
+        {
+            Debug.LogError("BulletPrefab is not assigned on Gun!");
+        }
     }
     
     void OnTriggerPulled(ActivateEventArgs args)
@@ -33,7 +42,6 @@ public class Gun : MonoBehaviour
         Debug.Log("Trigger pulled!");
         if (Time.time >= lastFireTime + fireRate)
         {
-            Debug.Log("Trigger pulled!");
             Fire();
             lastFireTime = Time.time;
         }
@@ -41,6 +49,12 @@ public class Gun : MonoBehaviour
     
     void Fire()
     {
+        if (firePoint == null || bulletPrefab == null)
+        {
+            Debug.LogError("Cannot fire: FirePoint or BulletPrefab is missing!");
+            return;
+        }
+        
         // Play effects
         if (muzzleFlash != null)
             muzzleFlash.Play();
@@ -48,20 +62,10 @@ public class Gun : MonoBehaviour
         if (audioSource && fireSound)
             audioSource.PlayOneShot(fireSound);
         
-        // Raycast
-        RaycastHit hit;
-        if (Physics.Raycast(firePoint.position, firePoint.forward, out hit, range))
-        {
-            // Check if we hit a can
-            Can can = hit.collider.GetComponent<Can>();
-            if (can != null)
-            {
-                can.OnHit(hit.point, firePoint.forward);
-            }
-        }
+        // Instantiate bullet
+        GameObject bullet = Instantiate(bulletPrefab, firePoint.position, firePoint.rotation);
         
-        // Debug line to see where we're shooting
-        Debug.DrawRay(firePoint.position, firePoint.forward * range, Color.red, 0.5f);
+        Debug.Log($"Bullet fired from {firePoint.position} in direction {firePoint.forward}");
     }
     
     void OnDestroy()
