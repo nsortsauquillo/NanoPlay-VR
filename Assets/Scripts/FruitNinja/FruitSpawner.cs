@@ -6,32 +6,60 @@ public class FruitSpawner : MonoBehaviour
 {
     public List<Transform> spawnPoints; 
     public List<GameObject> fruits;
-    public Vector3 force; 
-    
-    private IEnumerator SpawnFruit(float time)
+    public GameManager gameManager;
+    private IEnumerator SpawnFruit()
     {
         while (true)
         {
-            yield return new WaitForSeconds(time);
-            var rand = new System.Random();
-            int numFruits = rand.Next(2, 5);
-            for (int i = 0; i < numFruits; i++)
+            yield return new WaitForSeconds(gameManager.burstTime);
+            
+            for(int i = 0; i< gameManager.burstCount; i++)
             {
-                int index = rand.Next(0, fruits.Count);
-                GameObject fruit = Instantiate(fruits[index], spawnPoints[i].position, Quaternion.identity);
-                fruit.name = fruits[index].name;
-                Rigidbody rb = fruit.GetComponent<Rigidbody>();
-                rb.AddForce(force + new Vector3(Random.Range(0f, 0.1f), Random.Range(0f, 0.3f), Random.Range(0f, 0.1f)), ForceMode.Impulse);
-                rb.AddTorque(new Vector3(Random.Range(2f, 6f), Random.Range(2f, 6f), Random.Range(2f, 6f)), ForceMode.Impulse);
-                Destroy(fruit, 4);
+                GameObject prefabToSpawn;
+                if (Random.value < gameManager.bombChance)
+                {
+                    prefabToSpawn = fruits[fruits.Count - 1]; // Assuming the last fruit is a bomb
+                }
+                else
+                {
+                    int randomIndex = Random.Range(0, fruits.Count - 1); // Exclude the bomb
+                    prefabToSpawn = fruits[randomIndex];
+                }
+
+                Transform spawnPoint = spawnPoints[i % spawnPoints.Count];
+                GameObject obj = Instantiate(prefabToSpawn, spawnPoint.position, Quaternion.identity);
+                obj.name = prefabToSpawn.name;
+
+                Rigidbody rb = obj.GetComponent<Rigidbody>();
+
+                // Lanzamiento en parábola: fuerza con componente vertical + horizontal
+                Vector3 baseDirection = new Vector3(
+                    Random.Range(-0.5f, 0.5f),  // Variación horizontal X
+                    Random.Range(0.5f, 2.5f),                        // Componente vertical (subida)
+                    0f   // Variación horizontal Z hacia adelante
+                ).normalized;
+
+                float forceMagnitude = 8f * gameManager.forceMultiplier; // Ajusta fuerza total aquí
+
+                Vector3 launchForce = baseDirection * forceMagnitude;
+                rb.AddForce(launchForce, ForceMode.Impulse);
+
+                rb.AddTorque(new Vector3(
+                    Random.Range(2f, 6f),
+                    Random.Range(2f, 6f),
+                    Random.Range(2f, 6f)
+                ), ForceMode.Impulse);
+
+                Destroy(obj, 4f);
             }
+            
 
         }
     }
 
     public void StartSpawning()
     {
-        StartCoroutine(SpawnFruit(4));
+        StartCoroutine(SpawnFruit());
     }
 
     public void StopSpawning()

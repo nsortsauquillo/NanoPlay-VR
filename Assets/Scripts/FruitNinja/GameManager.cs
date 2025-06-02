@@ -1,3 +1,4 @@
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +12,15 @@ public class GameManager : MonoBehaviour
     public int lives = 3;
     public bool GameStarted = false;
 
-    float countdown = 4;
+
+    private float countdown = 4;
+    private float gameTimer = 0;
+
+    [Header("Dificultad")]
+    public int burstCount = 2;
+    public float burstTime = 3f;
+    public float bombChance = 0.1f;
+    public float forceMultiplier = 1f;
 
 
     public void Start()
@@ -34,7 +43,20 @@ public class GameManager : MonoBehaviour
                     UI.MainText.text = "Go!";
                 }
             }
+            else
+            {
+                gameTimer += Time.deltaTime;
+                UpdateDifficulty();
+            }
         }
+    }
+
+    public void UpdateDifficulty()
+    {
+        burstCount = Mathf.Clamp(1 + (int)(gameTimer / 30f), 3, 7);
+        burstTime = Mathf.Lerp(3f, 1f, gameTimer / 120f); // 3s → 1s
+        bombChance = Mathf.Clamp01(gameTimer / 90f);           // 0 → 1
+        forceMultiplier = Mathf.Lerp(1f, 1.8f, gameTimer / 100f);
     }
 
     public void DecreaseLife()
