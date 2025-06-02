@@ -14,10 +14,11 @@ public class SodaController : MonoBehaviour
 
     public GameObject liquid; // Material for the liquid inside the bottle
 
+    public bool isGrabbed { get; set; } = false;
+    public bool exploded = false;
     private int shakeCount = 0;
     private Vector3 lastPosition;
     private Quaternion lastRotation;
-    private bool exploded = false;
 
     private float shakeCooldown = 1.0f; // Minimum time between shakes (seconds)
     private float shakeCooldownRange = 0.5f; // Random range for shake cooldown
@@ -67,7 +68,7 @@ public class SodaController : MonoBehaviour
         lastRotation = transform.rotation;
 
         // Random shake to explode
-        //shakesToExplode = Random.Range(20, 40);
+        shakesToExplode = Random.Range(20, 40);
 
         // Initialize first cooldown
         currentShakeCooldown = shakeCooldown + Random.Range(-shakeCooldownRange, shakeCooldownRange);
@@ -141,6 +142,11 @@ public class SodaController : MonoBehaviour
     void Explode()
     {
         exploded = true;
+        if (liquidMaterial != null)
+        {
+            liquidMaterial.SetFloat("_Fill", 0f);
+            Debug.Log("Liquid fill set to 0 after explosion.");
+        }
         if (cap != null)
         {
             // Displace the cap vertically before applying force
@@ -163,20 +169,5 @@ public class SodaController : MonoBehaviour
         }
         Debug.Log("Soda exploded!");
         // Optionally, disable further interaction
-    }
-
-    // --- AI/Manager-accessible method to simulate a shake ---
-    public void SimulateShake()
-    {
-        if (exploded) return;
-        shakeCount++;
-        lastShakeTime = Time.time;
-        currentShakeCooldown = shakeCooldown + Random.Range(-shakeCooldownRange, shakeCooldownRange);
-        Debug.Log($"[AI] Simulated shake! New shake count: {shakeCount}. Next cooldown: {currentShakeCooldown:F2}s");
-        if (shakeCount >= shakesToExplode)
-        {
-            Debug.Log("[AI] Shake threshold reached! Exploding...");
-            Explode();
-        }
     }
 }

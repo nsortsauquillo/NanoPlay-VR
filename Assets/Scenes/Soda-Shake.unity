@@ -543,6 +543,7 @@ GameObject:
   m_Component:
   - component: {fileID: 624967158}
   - component: {fileID: 624967157}
+  - component: {fileID: 624967159}
   m_Layer: 0
   m_Name: Soda-Shake-Manager
   m_TagString: Untagged
@@ -563,6 +564,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sodaController: {fileID: 1420690817}
+  playerWinClip: {fileID: 8300000, guid: a508d73bd03114076a952f2c5bede7e0, type: 3}
+  aiWinClip: {fileID: 8300000, guid: 91edc2bf24a6da8a6a57ea1c29f4c3e2, type: 3}
 --- !u!4 &624967158
 Transform:
   m_ObjectHideFlags: 0
@@ -578,6 +581,102 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &624967159
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 624967156}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 0.756
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1001 &936366675
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -982,6 +1081,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 7169732546663212308, guid: cc145807189d7482bba9ecc478da4346, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1420690821}
+    - targetCorrespondingSourceObject: {fileID: 7169732546663212308, guid: cc145807189d7482bba9ecc478da4346, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1420690825}
   m_SourcePrefab: {fileID: 100100000, guid: cc145807189d7482bba9ecc478da4346, type: 3}
 --- !u!1 &1420690816 stripped
 GameObject:
@@ -1006,6 +1108,7 @@ MonoBehaviour:
   cap: {fileID: 1506006776}
   sodaSpray: {fileID: 1420690822}
   liquid: {fileID: 1484625865}
+  exploded: 0
 --- !u!4 &1420690820 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7551359475707985838, guid: cc145807189d7482bba9ecc478da4346, type: 3}
@@ -5808,6 +5911,18 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
+--- !u!114 &1420690825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1420690816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 942329861ad1d67d2ace93e41d4dabf0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1484625865 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6182033553803695955, guid: cc145807189d7482bba9ecc478da4346, type: 3}
@@ -5875,7 +5990,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 9f93ed545f92cd5b9b67541b6f93b754, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
