@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class ShootingGameManager : MonoBehaviour
 {
@@ -14,14 +15,20 @@ public class ShootingGameManager : MonoBehaviour
     [SerializeField] GameObject canPrefab;
     [SerializeField] Transform canContainer;
     
+    [Header("UI Elements")]
+    [SerializeField] TextMeshProUGUI highScoreText;
+    [SerializeField] TextMeshProUGUI currentScoreText;
+    
     [Header("Audio")]
     [SerializeField] AudioSource musicSource;
     [SerializeField] AudioClip synthwaveMusic;
     [SerializeField] AudioClip gameOverSound;
+    [SerializeField] AudioClip newHighScoreSound;
     
     // Game State
     private GameState currentState = GameState.Ready;
     private int currentScore = 0;
+    private int highScore = 0;
     private float gameTimer;
     private int currentPhase = 0;
     private bool gameStarted = false;
@@ -29,6 +36,9 @@ public class ShootingGameManager : MonoBehaviour
     private Coroutine canSpawnCoroutine;
     
     private Gun playerGun;
+    
+    // PlayerPrefs key for storing high score
+    private const string HIGH_SCORE_KEY = "ShootingGame_HighScore";
     
     public enum GameState
     {
@@ -49,6 +59,7 @@ public class ShootingGameManager : MonoBehaviour
             UpdateGameTimer();
             UpdatePhase();
             CleanupDestroyedCans(); // Clean up null references
+            UpdateCurrentScoreUI();
         }
     }
     
@@ -59,6 +70,13 @@ public class ShootingGameManager : MonoBehaviour
         gameTimer = gameDuration;
         currentPhase = 0;
         
+        // Load high score from PlayerPrefs
+        LoadHighScore();
+        
+        // Update UI with loaded high score
+        UpdateHighScoreUI();
+        UpdateCurrentScoreUI();
+        
         playerGun = FindObjectOfType<Gun>();
         
         if (musicSource && synthwaveMusic)
@@ -67,6 +85,48 @@ public class ShootingGameManager : MonoBehaviour
             musicSource.loop = true;
             musicSource.Play();
         }
+    }
+    
+    void LoadHighScore()
+    {
+        highScore = PlayerPrefs.GetInt(HIGH_SCORE_KEY, 0);
+        Debug.Log($"Loaded high score: {highScore}");
+    }
+    
+    void SaveHighScore()
+    {
+        PlayerPrefs.SetInt(HIGH_SCORE_KEY, highScore);
+        PlayerPrefs.Save();
+        Debug.Log($"Saved new high score: {highScore}");
+    }
+    
+    void UpdateHighScoreUI()
+    {
+        if (highScoreText != null)
+        {
+            highScoreText.text = $"High Score: {highScore}";
+        }
+    }
+    
+    void UpdateCurrentScoreUI()
+    {
+        if (currentScoreText != null)
+        {
+            currentScoreText.text = $"Score: {currentScore}";
+        }
+    }
+
+    
+    bool CheckForNewHighScore()
+    {
+        if (currentScore > highScore)
+        {
+            highScore = currentScore;
+            SaveHighScore();
+            UpdateHighScoreUI();
+            return true;
+        }
+        return false;
     }
     
     public void StartMinigame()
@@ -81,6 +141,8 @@ public class ShootingGameManager : MonoBehaviour
         gameTimer = gameDuration;
         currentScore = 0;
         currentPhase = 0;
+        
+        UpdateCurrentScoreUI();
         
         Debug.Log("Minigame started!");
         
@@ -244,6 +306,7 @@ public class ShootingGameManager : MonoBehaviour
     {
         currentScore += 10;
         Debug.Log($"Can hit! Score: {currentScore}");
+        UpdateCurrentScoreUI();
     }
     
     public void OnCanDestroyed(GameObject can)
@@ -276,10 +339,50 @@ public class ShootingGameManager : MonoBehaviour
         
         ClearActiveCans();
         
+        // Check for new high score
+        bool isNewHighScore = CheckForNewHighScore();
+        
         Debug.Log($"Game Over! Final Score: {currentScore}");
         
-        if (gameOverSound)
-            musicSource.PlayOneShot(gameOverSound);
+        if (isNewHighScore)
+        {
+            Debug.Log("NEW HIGH SCORE!");
+            
+            // Play special sound for new high score
+            if (newHighScoreSound && musicSource)
+            {
+                musicSource.PlayOneShot(newHighScoreSound);
+            }
+            
+            // You could add visual effects here like confetti, screen flash, etc.
+            StartCoroutine(HighScoreAnimation());
+        }
+        else
+        {
+            // Play regular game over sound
+            if (gameOverSound && musicSource)
+            {
+                musicSource.PlayOneShot(gameOverSound);
+            }
+        }
+    }
+    
+    IEnumerator HighScoreAnimation()
+    {
+        // Simple high score text animation
+        if (highScoreText != null)
+        {
+            Color originalColor = highScoreText.color;
+            
+            // Flash the high score text
+            for (int i = 0; i < 3; i++)
+            {
+                highScoreText.color = Color.yellow;
+                yield return new WaitForSeconds(0.3f);
+                highScoreText.color = originalColor;
+                yield return new WaitForSeconds(0.3f);
+            }
+        }
     }
     
     public void RestartMinigame()
@@ -297,9 +400,19 @@ public class ShootingGameManager : MonoBehaviour
         playerGun = gun;
     }
     
-    // Public getters for external access
+    // Public methods for external access to scores
     public int GetCurrentScore() => currentScore;
+    public int GetHighScore() => highScore;
     public float GetTimeRemaining() => gameTimer;
     public GameState GetCurrentState() => currentState;
     public bool IsGameActive() => currentState == GameState.Playing;
+    
+    // Public method to manually reset high score (for testing or settings menu)
+    public void ResetHighScore()
+    {
+        highScore = 0;
+        SaveHighScore();
+        UpdateHighScoreUI();
+        Debug.Log("High score reset to 0");
+    }
 }
