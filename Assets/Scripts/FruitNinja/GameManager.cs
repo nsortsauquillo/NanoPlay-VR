@@ -12,7 +12,6 @@ public class GameManager : MonoBehaviour
     public int score = 0;
     public int lives = 3;
     public bool GameStarted = false;
-    public Button playButton; 
 
 
     private float countdown = 4;
@@ -59,22 +58,22 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         if (GameStarted) return; 
+        UI.mainPanel.SetActive(true);
         fruitSpawner.StartSpawning();
         score = 0;
         countdown = 4;
         lives = 3;
-        //UI.LivesText.text = lives.ToString();
-        //UI.ScoreText.text = score.ToString();
+        UI.LivesText.text = lives.ToString();
+        UI.ScoreText.text = score.ToString();
         GameStarted = true;
     }
 
     public void StopGame()
     {
-        if (!GameStarted) return; 
+        if (!GameStarted) return;
+        UI.mainPanel.SetActive(false);
         fruitSpawner.StopSpawning();
         GameStarted = false;
-        //UI.MainText.text = " ";
-        if (playButton != null)
-            playButton.interactable = true;
+        UI.MainText.text = " ";
     }
 }
