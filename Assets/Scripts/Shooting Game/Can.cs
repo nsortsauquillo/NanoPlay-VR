@@ -3,8 +3,8 @@ using UnityEngine;
 public class Can : MonoBehaviour
 {
     [Header("Can Settings")]
-    [SerializeField] float hitForce = 3.0f;
-    [SerializeField] float upwardForce = 8.0f;
+    [SerializeField] float hitForce = 1.1f;      // Horizontal force
+    [SerializeField] float upwardForce = 3.0f;   // Upward force - much smaller!
     [SerializeField] AudioClip hitSound;
     [SerializeField] ParticleSystem hitEffect;
     
@@ -17,7 +17,6 @@ public class Can : MonoBehaviour
     private AudioSource audioSource;
     private bool hasBeenHit = false;
     private ShootingGameManager gameManager;
-    private float hitTime = 0f;
     
     void Start()
     {
@@ -70,14 +69,7 @@ public class Can : MonoBehaviour
     
     public void OnHit(Vector3 hitPoint, Vector3 hitDirection)
     {
-        // Extra safety check with timing to prevent rapid multiple hits
-        float currentTime = Time.time;
-        if (hasBeenHit && currentTime - hitTime < 0.1f) 
-        {
-            Debug.Log($"Can hit ignored - too soon after last hit. Time diff: {currentTime - hitTime}");
-            return; // Prevent multiple hits within 0.1 seconds
-        }
-        
+        // Simple check to prevent multiple hits
         if (hasBeenHit)
         {
             Debug.Log("Can already hit previously, ignoring additional hit");
@@ -85,31 +77,33 @@ public class Can : MonoBehaviour
         }
         
         hasBeenHit = true;
-        hitTime = currentTime;
-        Debug.Log($"Can hit for the first time at time {hitTime}!");
+        Debug.Log($"Can hit! Hit direction: {hitDirection}");
         
         // Apply impulse to create parabolic trajectory
         if (rb != null)
         {
-            // Create a more pronounced horizontal force for parabolic motion
-            Vector3 horizontalForce = new Vector3(hitDirection.x, 0, hitDirection.z).normalized * hitForce;
+            // Create horizontal force (remove Y component to keep it horizontal)
+            Vector3 horizontalDirection = new Vector3(hitDirection.x, 0, hitDirection.z).normalized;
+            Vector3 horizontalForce = horizontalDirection * hitForce;
             
-            // Strong upward force to create the arc
+            // Always apply upward force regardless of hit direction
             Vector3 upwardImpulse = Vector3.up * upwardForce;
             
-            // Apply forces separately for better control
+            Debug.Log($"Horizontal force: {horizontalForce}, Upward force: {upwardImpulse}");
+            
+            // Apply forces separately
             rb.AddForce(horizontalForce, ForceMode.Impulse);
             rb.AddForce(upwardImpulse, ForceMode.Impulse);
             
-            // Optional: Add a slight random rotation for more realistic movement
+            // Add some rotation for realism
             Vector3 randomTorque = new Vector3(
-                Random.Range(-2f, 2f), 
-                Random.Range(-2f, 2f), 
-                Random.Range(-2f, 2f)
+                Random.Range(-1f, 1f), 
+                Random.Range(-1f, 1f), 
+                Random.Range(-1f, 1f)
             );
             rb.AddTorque(randomTorque, ForceMode.Impulse);
             
-            Debug.Log($"Applied horizontal impulse: {horizontalForce}, upward impulse: {upwardImpulse}");
+            Debug.Log("Forces applied successfully!");
         }
         
         // Play hit effect
