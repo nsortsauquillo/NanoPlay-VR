@@ -96,8 +96,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
-  m_LightingSettings: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 4c2494d53d50aba4a8270684e02ae595, type: 2}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: 1ebdf1088920f444b983a778df9888eb, type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -6083,6 +6083,10 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 2147483647
       objectReference: {fileID: 0}
+    - target: {fileID: -6902573867230041995, guid: 19c531c56761ad59f836938b137bdc4d, type: 3}
+      propertyPath: m_ReceiveGI
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: -6733177361254619370, guid: 19c531c56761ad59f836938b137bdc4d, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
@@ -6111,6 +6115,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0.052387
       objectReference: {fileID: 0}
+    - target: {fileID: -1439730007547781893, guid: 19c531c56761ad59f836938b137bdc4d, type: 3}
+      propertyPath: m_ReceiveGI
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 19c531c56761ad59f836938b137bdc4d, type: 3}
       propertyPath: m_Name
       value: Escenario
@@ -6122,6 +6130,14 @@ PrefabInstance:
     - target: {fileID: 2800250516343163423, guid: 19c531c56761ad59f836938b137bdc4d, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
+      objectReference: {fileID: 0}
+    - target: {fileID: 6944656104360116776, guid: 19c531c56761ad59f836938b137bdc4d, type: 3}
+      propertyPath: m_ReceiveGI
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7071182760956848314, guid: 19c531c56761ad59f836938b137bdc4d, type: 3}
+      propertyPath: m_ReceiveGI
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8513859187771203891, guid: 19c531c56761ad59f836938b137bdc4d, type: 3}
       propertyPath: m_StaticEditorFlags
