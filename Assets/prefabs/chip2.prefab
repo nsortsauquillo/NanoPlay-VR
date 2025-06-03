@@ -138,6 +138,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 988dff4d7d5287b45960779d38b08da7, type: 3}
+      propertyPath: m_TagString
+      value: Fruit
+      objectReference: {fileID: 0}
     - target: {fileID: 3532955182506012565, guid: 988dff4d7d5287b45960779d38b08da7, type: 3}
       propertyPath: m_Layer
       value: 6

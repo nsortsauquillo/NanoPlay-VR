@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
@@ -23,12 +24,18 @@ public class GameManager : MonoBehaviour
     public float bombChance = 0.1f;
     public float forceMultiplier = 1f;
 
+    [SerializeField] TextMeshProUGUI highScoreText;
+    [SerializeField] TextMeshProUGUI currentScoreText;
+
+    private int highScore = 0;
+
     private void Update()
     {
         if (GameStarted)
         {
             gameTimer += Time.deltaTime;
             UpdateDifficulty();
+            currentScoreText.text = "Current Score: " + score.ToString();
         }
     }
 
@@ -71,9 +78,17 @@ public class GameManager : MonoBehaviour
     public void StopGame()
     {
         if (!GameStarted) return;
-        UI.mainPanel.SetActive(false);
+      
         fruitSpawner.StopSpawning();
         GameStarted = false;
         UI.MainText.text = " ";
+        if (score > highScore)
+        {
+            highScore = score;
+            
+        }
+        
+        highScoreText.text = "High Score: " + highScore.ToString();
+        UI.mainPanel.SetActive(false);
     }
 }
