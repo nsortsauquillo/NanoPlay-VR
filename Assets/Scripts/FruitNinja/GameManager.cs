@@ -52,15 +52,15 @@ public class GameManager : MonoBehaviour
         lives--;
         if(lives == 0)
         {
-            StopGame();
             UI.MainText.text = "Game Over!";
+            StopGame();
         }
     }
-
+     
     public void IncreaseScore(int points)
     {
         score += points;
-    }
+    }  
 
     public void StartGame()
     {
