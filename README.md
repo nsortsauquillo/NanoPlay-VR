@@ -10,7 +10,7 @@ Los minijuegos están pensados para ser accesibles desde el primer momento. No h
 ### Minijuego 1:
 Agarra la botella y agitala peleando contra la maquina, aquel que la agite de mas y le salte toda la bebida encima pierde.
 
-### Minijeugo 2: 
+### Minijuego 2: 
 Coge la espada y corta tantos chips como puedas antes de que se acabe el tiempo. ¡¡Cuidado con los disruptores que caen del cielo!!
 
 ### Minijuego 3:
